@@ -1,1 +1,5 @@
 bg_colour: "black"
+outline_colour: "white"
+distance: 10
+polygons:
+  - [[10, 0, 10], [20, 0, 10], [20, 10, 10], [10, 10, 10]]
