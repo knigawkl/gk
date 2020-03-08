@@ -1,7 +1,13 @@
+import math
+import numpy
 from typing import List
 import argparse
 import bios
 import tkinter
+
+
+def priority(polygon):
+    return math.sqrt(sum([e**2 for e in numpy.mean(numpy.array(polygon), axis=0)]))
 
 
 def read_cfg(cfg_path: str) -> dict:
@@ -18,12 +24,16 @@ def create_window() -> tkinter.Tk:
 def render(canvas: tkinter.Canvas, polygons: List[List[int]], outline_colour: str, distance: int,
            screen_height: int, screen_width: int):
     canvas.delete(tkinter.ALL)
+    polygons = sorted(polygons, key=priority, reverse=True)
     for polygon in polygons:
         points = []
         for point in polygon:
             point_2d = project(point, distance, screen_height, screen_width)
             points.append(point_2d)
-        canvas.create_polygon(points, outline=outline_colour)
+        canvas.create_line(points[0], points[1], fill="red")
+        canvas.create_line(points[1], points[2], fill="red")
+        canvas.create_line(points[2], points[3], fill="red")
+        canvas.create_line(points[3], points[0], fill="red")
     canvas.pack()
 
 
