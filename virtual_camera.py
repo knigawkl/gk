@@ -19,9 +19,11 @@ def render(canvas: tkinter.Canvas, polygons: List[List[int]], outline_colour: st
            screen_height: int, screen_width: int):
     canvas.delete(tkinter.ALL)
     for polygon in polygons:
+        points = []
         for point in polygon:
-
             point_2d = project(point, distance, screen_height, screen_width)
+            points.append(point_2d)
+        canvas.create_polygon(points, outline=outline_colour)
     canvas.pack()
 
 
@@ -40,12 +42,12 @@ if __name__ == "__main__":
     outline_colour = cfg["outline_colour"]
     distance = cfg["distance"]
     polygons = cfg["polygons"]
+    width = cfg["screen"]["width"]
+    height = cfg["screen"]["height"]
 
     window = create_window()
-    screen_width = window.winfo_screenwidth()
-    screen_height = window.winfo_screenheight()
-    canvas = tkinter.Canvas(window, width=screen_width, height=screen_height, bg=bg_colour)
+    canvas = tkinter.Canvas(window, width=width, height=height, bg=bg_colour)
 
-    render(canvas, polygons, outline_colour, distance, screen_height, screen_width)
+    render(canvas, polygons, outline_colour, distance, height, width)
 
     tkinter.mainloop()
