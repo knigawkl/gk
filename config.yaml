@@ -4,6 +4,8 @@ screen:
 bg_colour: "black"
 outline_colour: "red"
 distance: 200
+zoom_step: 50
+step: 2
 polygons:
   # closer right
   - [[1, 0, 1], [2, 0, 1], [2, 1, 1], [1, 1, 1]]
