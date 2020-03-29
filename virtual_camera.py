@@ -7,14 +7,7 @@ import tkinter
 from helpers import read_cfg
 
 
-def priority(polygon):
-    return math.sqrt(sum([e**2 for e in numpy.mean(numpy.array(polygon), axis=0)]))
-
-
-def create_window() -> tkinter.Tk:
-    window = tkinter.Tk()
-    window.title("Virtual Camera")
-    return window
+priority = lambda p: math.sqrt(sum([e**2 for e in numpy.mean(numpy.array(p), axis=0)]))
 
 
 def render(canvas: tkinter.Canvas, polygons: List[List[int]], outline_colour: str, distance: int,
@@ -51,7 +44,7 @@ if __name__ == "__main__":
     width = cfg["screen"]["width"]
     height = cfg["screen"]["height"]
 
-    window = create_window()
+    window = tkinter.Tk().title("Virtual Camera")
     canvas = tkinter.Canvas(window, width=width, height=height, bg=bg_colour)
 
     render(canvas, polygons, outline_colour, distance, height, width)
