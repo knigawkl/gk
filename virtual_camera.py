@@ -1,4 +1,4 @@
-import math
+from math import sqrt, cos, sin, pi
 import numpy
 from typing import List
 import tkinter
@@ -6,7 +6,7 @@ from functools import partial
 
 from helpers import read_cfg, get_parser
 
-priority = lambda p: math.sqrt(sum([e ** 2 for e in numpy.mean(numpy.array(p), axis=0)]))
+priority = lambda p: sqrt(sum([e ** 2 for e in numpy.mean(numpy.array(p), axis=0)]))
 project = lambda point, dist, h, w: (w / 2 + (dist * point[0] / point[2]), h / 2 - (dist * point[1] / point[2]))
 translate = lambda point, vector: list(numpy.sum([point, vector], axis=0))
 
@@ -26,8 +26,7 @@ def render(canvas: tkinter.Canvas, polygons: List[List[int]], outline: str, dist
 
 def zoom(key: str):
     global distance
-    step = zoom_step if key == "r" else -zoom_step
-    distance += step
+    distance = distance + zoom_step if key == "r" else distance - zoom_step
 
 
 def trans(key: str):
@@ -48,12 +47,15 @@ def trans(key: str):
 
 
 def rotate(key):
+    global polygons
+    angle = -rotation_step if key in ("8", "7", "4") else rotation_step
     if key in ("8", "2"):
-        print(key)
-    elif key in ("8", "2"):
-        vec = [-step, 0, 0]
-    elif key in ("8", "2"):
-        vec = [0, -step, 0]
+        matrix = [[1, 0, 0, 0], [0, cos(angle), -sin(angle), 0], [0, sin(angle), cos(angle), 0], [0, 0, 0, 1]]
+    elif key in ("7", "9"):
+        matrix = [[cos(angle), 0, sin(angle), 0], [0, 1, 0, 0], [-sin(angle), 0, cos(angle), 0], [0, 0, 0, 1]]
+    elif key in ("4", "6"):
+        matrix = [[cos(angle), -sin(angle), 0, 0], [sin(angle), cos(angle), 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
+    polygons = list(map(lambda p: list(map(partial(translate, matrix=matrix), p)), polygons))
 
 
 def action(event):
@@ -72,6 +74,7 @@ if __name__ == "__main__":
     distance = cfg["distance"]
     polygons = cfg["polygons"]
     zoom_step = cfg["zoom_step"]
+    rotation_step = cfg["rotation_step"]
     step = cfg["step"]
     width = cfg["screen"]["width"]
     height = cfg["screen"]["height"]
