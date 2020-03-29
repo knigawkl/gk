@@ -17,26 +17,26 @@ def render(canvas: tkinter.Canvas, polygons: List[List[int]], outline: str, dist
         points = []
         for point in polygon:
             points.append(project(point, dist, height, width))
-        canvas.create_line(points[0], points[1], fill=outline)
-        canvas.create_line(points[1], points[2], fill=outline)
-        canvas.create_line(points[2], points[3], fill=outline)
-        canvas.create_line(points[3], points[0], fill=outline)
+        for i in range(len(points)-1):
+            print(i, i+1)
+            canvas.create_line(points[i], points[i+1], fill=outline)
+        canvas.create_line(points[0], points[len(points)-1], fill=outline)
     canvas.pack()
 
 
 if __name__ == "__main__":
     args = get_parser().parse_args()
     cfg = read_cfg(args.conf_path)
-    bg_colour = cfg["bg_colour"]
-    outline_colour = cfg["outline_colour"]
+    background = cfg["bg_colour"]
+    outline = cfg["outline_colour"]
     distance = cfg["distance"]
     polygons = cfg["polygons"]
     width = cfg["screen"]["width"]
     height = cfg["screen"]["height"]
 
     window = tkinter.Tk().title("Virtual Camera")
-    canvas = tkinter.Canvas(window, width=width, height=height, bg=bg_colour)
+    canvas = tkinter.Canvas(window, width=width, height=height, bg=background)
 
-    render(canvas, polygons, outline_colour, distance, height, width)
+    render(canvas, polygons, outline, distance, height, width)
 
     tkinter.mainloop()
