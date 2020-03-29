@@ -7,6 +7,7 @@ from helpers import read_cfg, get_parser
 
 
 priority = lambda p: math.sqrt(sum([e**2 for e in numpy.mean(numpy.array(p), axis=0)]))
+project = lambda point, dist, h, w: (w / 2 + (dist * point[0] / point[2]), h / 2 - (dist * point[1] / point[2]))
 
 
 def render(canvas: tkinter.Canvas, polygons: List[List[int]], outline: str, dist: int, height: int, width: int):
@@ -15,18 +16,12 @@ def render(canvas: tkinter.Canvas, polygons: List[List[int]], outline: str, dist
     for polygon in polygons:
         points = []
         for point in polygon:
-            point_2d = project(point, dist, height, width)
-            points.append(point_2d)
+            points.append(project(point, dist, height, width))
         canvas.create_line(points[0], points[1], fill=outline)
         canvas.create_line(points[1], points[2], fill=outline)
         canvas.create_line(points[2], points[3], fill=outline)
         canvas.create_line(points[3], points[0], fill=outline)
     canvas.pack()
-
-
-def project(point: List[int], distance: int, height: int, width: int):
-    return (width / 2 + (distance * point[0] / point[2]),
-            height / 2 - (distance * point[1] / point[2]))
 
 
 if __name__ == "__main__":
