@@ -2,7 +2,7 @@ import math
 import numpy
 from typing import List
 import tkinter
-import functools
+from functools import partial
 
 from helpers import read_cfg, get_parser
 
@@ -44,13 +44,22 @@ def trans(key: str):
         vec = [0, 0, -step]
     elif key == "s":
         vec = [0, 0, step]
-    polygons = list(map(lambda p: list(map(functools.partial(translate, vector=vec), p)), polygons))
+    polygons = list(map(lambda p: list(map(partial(translate, vector=vec), p)), polygons))
 
+
+def rotate(key):
+    if key in ("8", "2"):
+        print(key)
+    elif key in ("8", "2"):
+        vec = [-step, 0, 0]
+    elif key in ("8", "2"):
+        vec = [0, -step, 0]
 
 
 def action(event):
-    actions = {"r": zoom, "t": zoom,
-               "a": trans, "d": trans, "c": trans, "x": trans, "w": trans, "s": trans}
+    actions = dict.fromkeys(["r", "t"], zoom)
+    actions.update(dict.fromkeys(["a", "d", "c", "x", "w", "s"], trans))
+    actions.update(dict.fromkeys(["8", "2", "7", "9", "4", "6"], trans))
     actions[event.char](event.char)
     render(canvas, polygons, outline, distance, height, width)
 
