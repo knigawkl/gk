@@ -3,12 +3,12 @@ import numpy
 from typing import List
 import tkinter
 from functools import partial
-
 from helpers import read_cfg, get_parser
 
 priority = lambda p: sqrt(sum([e ** 2 for e in numpy.mean(numpy.array(p), axis=0)]))
 project = lambda point, dist, h, w: (w / 2 + (dist * point[0] / point[2]), h / 2 - (dist * point[1] / point[2]))
 translate = lambda point, vector: list(numpy.sum([point, vector], axis=0))
+rotate = lambda point, matrix: list(numpy.matmul(matrix, point + [1])[:-1])
 
 
 def render(canvas: tkinter.Canvas, polygons: List[List[int]], outline: str, dist: int, height: int, width: int):
@@ -46,7 +46,7 @@ def trans(key: str):
     polygons = list(map(lambda p: list(map(partial(translate, vector=vec), p)), polygons))
 
 
-def rotate(key):
+def rot(key):
     global polygons
     angle = -rotation_step if key in ("8", "7", "4") else rotation_step
     if key in ("8", "2"):
@@ -55,13 +55,13 @@ def rotate(key):
         matrix = [[cos(angle), 0, sin(angle), 0], [0, 1, 0, 0], [-sin(angle), 0, cos(angle), 0], [0, 0, 0, 1]]
     elif key in ("4", "6"):
         matrix = [[cos(angle), -sin(angle), 0, 0], [sin(angle), cos(angle), 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]]
-    polygons = list(map(lambda p: list(map(partial(translate, matrix=matrix), p)), polygons))
+    polygons = list(map(lambda p: list(map(partial(rotate, matrix=matrix), p)), polygons))
 
 
 def action(event):
     actions = dict.fromkeys(["r", "t"], zoom)
     actions.update(dict.fromkeys(["a", "d", "c", "x", "w", "s"], trans))
-    actions.update(dict.fromkeys(["8", "2", "7", "9", "4", "6"], trans))
+    actions.update(dict.fromkeys(["8", "2", "7", "9", "4", "6"], rot))
     actions[event.char](event.char)
     render(canvas, polygons, outline, distance, height, width)
 
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     distance = cfg["distance"]
     polygons = cfg["polygons"]
     zoom_step = cfg["zoom_step"]
-    rotation_step = cfg["rotation_step"]
+    rotation_step = pi / cfg["rotation_step"]
     step = cfg["step"]
     width = cfg["screen"]["width"]
     height = cfg["screen"]["height"]
