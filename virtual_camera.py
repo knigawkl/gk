@@ -18,9 +18,7 @@ def render(canvas: tkinter.Canvas, polygons: List[List[int]], outline: str, dist
         points = []
         for point in polygon:
             points.append(project(point, dist, height, width))
-        for i in range(len(points) - 1):
-            canvas.create_line(points[i], points[i + 1], fill=outline)
-        canvas.create_line(points[0], points[len(points) - 1], fill=outline)
+        canvas.create_polygon(points, fill=background, outline=outline)
     canvas.pack()
 
 
