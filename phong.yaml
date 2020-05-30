@@ -1,7 +1,7 @@
 coords:
   observer: [200, 200, 0]
   center: [200, 200, 200]
-  source: [200, 200, 0]
+  source: [0, 400, 0]
 radius: 180
 window:
   width: 400
@@ -9,4 +9,7 @@ window:
 illumination:
   IA: 1
   IP: 1
-
+  KA: 0.05
+  KD: 0.5
+  KS: 0.5
+  N: 500

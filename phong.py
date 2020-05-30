@@ -57,10 +57,10 @@ def versor(vector):
 def illumination(point):
     IA = cfg["illumination"]["IA"]
     IP = cfg["illumination"]["IP"]
-    KA = 0.05
-    KD = 0.5
-    KS = 0.5
-    N = 50
+    KA = cfg["illumination"]["KA"]
+    KD = cfg["illumination"]["KD"]
+    KS = cfg["illumination"]["KS"]
+    N = cfg["illumination"]["N"]
 
     n = versor(vector(CENTER, point))
     v = versor(vector(point, OBSERVER))
@@ -82,5 +82,4 @@ def render():
 
 
 render()
-
 tkinter.mainloop()
