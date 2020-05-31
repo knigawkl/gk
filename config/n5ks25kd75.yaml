@@ -1,0 +1,15 @@
+coords:
+  observer: [200, 200, 0]
+  center: [200, 200, 200]
+  source: [100, 300, -100]
+radius: 100
+window:
+  width: 400
+  height: 400
+illumination:
+  IA: 1
+  IP: 1
+  KA: 0.05
+  KD: 0.75
+  KS: 0.25
+  N: 5

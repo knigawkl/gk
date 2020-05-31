@@ -6,19 +6,16 @@ from helpers import read_cfg, get_parser
 
 parser = get_parser()
 args = parser.parse_args()
-
 cfg = read_cfg(args.conf_path)
 WIDTH = cfg["window"]["width"]
 HEIGHT = cfg["window"]["height"]
-
 OBSERVER = cfg["coords"]["observer"]
 CENTER = cfg["coords"]["center"]
 SOURCE = cfg["coords"]["source"]
-
 RADIUS = cfg["radius"]
 
 root = tkinter.Tk()
-root.title('Phong')
+root.title(args.conf_path.split("/")[1].split(".")[0])
 image = tkinter.PhotoImage(width=WIDTH, height=HEIGHT)
 label = tkinter.Label(image=image)
 label.pack()
